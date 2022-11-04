@@ -1,0 +1,17 @@
+#!/usr/bin/env jsc
+// visually tests entropy encoder and decoder
+const
+	module={},
+	mod=load(arguments[0]),
+				// logarithmic distribution
+	max=Array(9).fill().map(q=>4e9**Math.random()|0),
+	rnd=max.map(q=>Math.random()*q|0),
+	zip=[],
+	enc=mod(zip,arguments[1]),	// optional second argument
+	udf=max.forEach((j,k)=>enc(j,rnd[k])),
+	dec=mod(zip,arguments[1]),	// optional second argument
+nil=0;
+print(zip);
+print(rnd);
+print(max.map(q=>dec(q)));	// this line should be identical to previous
+print(dec(rnd[Math.random()*rnd.length|0]));	// EOF, must be falsy

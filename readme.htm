@@ -1,0 +1,39 @@
+<button>Select</button> a file to compress. If the extension is .mru, it will be uncompressed instead.<p>
+View the source of this file as an example on how to integrate the modules into your webpage.<p>
+To compress a file with node.js:<br>
+<code>
+node -e 'let j=[],k=require("fs");require("./lzw")(require("./bit")(j))(Array.from(k.readFileSync("RAWFILE")));k.writeFileSync("ZIPFILE",Buffer.from(j))'
+</code><br>
+To uncompress:<br>
+<code>
+node -e 'let j=[],k=require("fs");require("./lzw")(require("./bit")(Array.from(k.readFileSync("ZIPFILE"))))(j);k.writeFileSync("RAWFILE",Buffer.from(j))'
+</code><br>
+See std.awk for how to use it with JavaScriptCore.<p>
+The compressor or uncompressor consists of a dictionary encoder or decoder and an entropy encoder or decoder.<br>
+Dictionary encoders or decoders are: nop.js, lzw.js<br>
+Entropy encoders or decoders are: rdx.js, bit.js<p>
+Todo: lzmw, lzss, tbe, vlc, ans
+<script>module={}</script>
+<script src=bit.js></script>
+<script>module.b=module.exports</script>
+<script src=lzw.js></script>
+<script>
+const d=document,c=q=>d.createElement(q);
+d.querySelector`button`.onclick=q=>Object.assign(q=c`input`,{
+	type:'file',
+	oninput:j=>Object.assign(j=new FileReader(),{onload:k=>{
+		k=q.files[0].name;
+//	buffer to hold data	and data read from file
+		let v=[],w=v,x=new Uint8Array(j.result);
+// determine if we're compressing or decompressing
+		k.endsWith`.mru`?[w,x,k]=[x,w,k.slice(0,-4)]:k+='.mru';
+// call the loaded libraries, actual work happens here
+		module.exports(module.b(w))(x);
+// write result to file
+		Object.assign(c`a`,{
+			href:URL.createObjectURL(new Blob([new Uint8Array(v)])),
+			download:k,
+		}).click();
+	}}).readAsArrayBuffer(q.files[0]),
+}).click();
+</script>
